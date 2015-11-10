@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+<components>
+<component id="DBLocalBookRepository"
+             service="Repository.IBookRepository,  BookSample"
+             type="Repository.DBLocalBookRepository,  BookSample"/>
+<component id="BookReaderFactory"
+             service="BookSample.Common.IBookReaderFactory,  BookSample"
+             type="BookSample.Common.BookReaderFactory,  BookSample"/>
+</components>
+</configuration>

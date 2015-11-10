@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Books xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Book>
+    <Id>7</Id>
+    <Title>Сияние67</Title>
+    <Author>Кинг, Стивен67</Author>
+    <Year>19776</Year>
+    <ISBN>56456</ISBN>
+  </Book>
+  <Book>
+    <Id>7</Id>
+    <Title>Сияние67</Title>
+    <Author>Кинг, Стивен67</Author>
+    <Year>19776</Year>
+    <ISBN>56456</ISBN>
+  </Book>
+  <Book>
+    <Id>3</Id>
+    <Title>Сияние 2</Title>
+    <Author>Кинг, Стивен</Author>
+    <Year>1977</Year>
+    <ISBN>0</ISBN>
+  </Book>
+</Books>

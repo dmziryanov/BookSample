@@ -1,0 +1,134 @@
+﻿@using BookSample.Models
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - BookSample</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/knockout")
+
+    <script type="text/javascript">
+        currentPage = 1;
+        maxPages = 1;
+        defaultPageNum = 1;
+
+        String.format = function () {
+            var theString = arguments[0];
+            for (var i = 1; i < arguments.length; i++) {
+                var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+                theString = theString.replace(regEx, arguments[i]);
+            }
+
+            return theString;
+        }
+
+        function DeleteBook(href) {
+            $.ajax({
+                url: href.delurl
+            });
+            GetServerData(defaultPageNum);
+        }
+
+        function refreshPager(pageNum, nextOper) {
+            $.getJSON("/Home/GetPagesData", function(pdata) {
+                pagedata = pdata;
+                maxPages = pdata.length;
+                if (pageNum < 1) pageNum = 1;
+                if (pageNum > maxPages) pageNum = maxPages;
+                currentPage = pageNum;
+                ko.mapping.fromJS(pagedata, {}, viewModel.PagedItems);
+                $(".pageItem").removeClass("selectedItem");
+                $(".pageItem:eq(" + pageNum + ")").addClass("selectedItem");
+
+            }).success(function() {
+                nextOper(currentPage);
+            });
+
+        }
+
+        function refreshBooks(pageNum) {
+            $.getJSON(String.format("/Home/GetData?currentPage={0}&SortBy={1}&FilterBy={2}&Filter={3}", pageNum, $("#SortBy option:selected").text(), $("#FilterBy option:selected").text(), $("#FilterString").val()),
+                function (booksdata) {
+                    booksdata.forEach(function (el) {
+                        el.Delete = function () {
+                            $.ajax({
+                                url: el.deleteurl
+                            });
+                            GetServerData(defaultPageNum);
+                        }
+                    });
+                    ko.mapping.fromJS(booksdata, {}, viewModel.Books);
+                });
+        }
+
+        function GetServerData(pageNum) {
+            refreshPager(pageNum, refreshBooks);
+        }
+
+        function ViewModel() {
+            var self = this;
+
+            self.Books = ko.observableArray([]);
+            self.PagedItems = ko.observableArray([]);
+        }
+
+        viewModel = new ViewModel();
+
+        $(document).ready(function () {
+            GetServerData(defaultPageNum);
+            $(".dropdown").bind("change", function () { GetServerData(defaultPageNum); });
+            ko.applyBindings(viewModel);
+        });
+    </script>
+</head>
+<body>
+    <header></header>
+    <div id="body">
+        @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {
+            <fieldset>
+                Select a file <input type="file" name="file"/>
+                <input type="submit" value="Upload books"/>
+                <a href="Home/Export" style="float: right" class="">DownLoad all books</a>
+            </fieldset>
+        }
+        <div>
+            Filter by: @Html.DropDownList("FilterBy", new SelectList(Enum.GetValues(typeof(BookFieldType))), new { @class = "dropdown" }) Value: @Html.TextBox("FilterString", ViewBag.Filter as string)<br>
+            Sort by: @Html.DropDownList("SortBy",new SelectList(Enum.GetValues(typeof(BookFieldType))), new { @class = "dropdown" })
+        </div>
+        <div data-bind="foreach: Books" style="display: inline-block">
+            <div class="card" style="float: left">
+                <div style="float: left">
+                    <img class="bordgray" width="100px" src="/images/PlaceholderBook.png" /><br>
+                    <div style="width: 100px" class="article" data-bind="text: DisplayISBN"></div>
+                </div>
+
+                <div style="float: left; height: 140px; width: 210px; display: block">
+                    <span class="author_name" data-bind="text: Author"></span><br>
+                    <span class="description" data-bind="text: Title"></span><br>
+                    <span>Год издания: </span><span data-bind="text: Year"></span><br>
+                    <div style="clear: both;"></div>
+                </div>
+                <div>
+                    <a data-bind="click: Delete" style="float: right; cursor: pointer;" class="Delete">Delete</a>
+                 </div>
+                <a data-bind="attr: { href: editurl }" style="float: right" class="">Edit</a>
+            </div>
+        </div>
+        <br>
+        <div>
+            <div class="pageItem" style="float:left" onclick="GetServerData(currentPage - 1);">prev</div>
+            <span data-bind="foreach: PagedItems">
+                <div class="pageItem" style="float:left" data-bind="text: pagenum" onclick="GetServerData(this.innerHTML); ">
+
+                </div>
+            </span>
+            <div class="pageItem" style="float:left" onclick="GetServerData(currentPage + 1); ">next</div>
+        </div>
+    </div>
+</body>
+</html>
