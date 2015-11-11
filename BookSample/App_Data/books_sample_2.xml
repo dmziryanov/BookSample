@@ -1,0 +1,17 @@
+<Books xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Book>
+    <Title>Мертвые души</Title>
+    <Author>Гоголь, Николай</Author>
+    <Year>1842</Year>
+  </Book>
+  <Book>
+    <Title>Станционный смотритель</Title>
+    <Author>Пушкин, Александр</Author>
+    <Year>1831</Year>
+  </Book>
+  <Book>
+    <Title>Сияние</Title>
+    <Author>Кинг, Стивен</Author>
+    <Year>1977</Year>
+  </Book>
+</Books>
