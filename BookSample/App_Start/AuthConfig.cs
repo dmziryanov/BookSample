@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Web.WebPages.OAuth;
-using BookSample.Models;
-
-namespace BookSample
+﻿namespace BookSample
 {
     public static class AuthConfig
     {

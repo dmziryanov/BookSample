@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Xml.Serialization;
 using BookSample.Common;
-using BookSample.Models;
-using ExcelLibrary.SpreadSheet;
-using Repository;
+using DAL.Models;
+using DAL.Readers;
+using DAL.Repository;
 
 namespace BookSample.Controllers
 {
@@ -20,7 +15,7 @@ namespace BookSample.Controllers
         {
             private readonly IBookRepository _bookRepository;
             private readonly int pageSize = 5;
-            private string _booksdocXls = "Book.xls";
+            private string _booksdocXls =  "Book.xls";
             private IBookReaderFactory _bookReaderFactory;
 
             public HomeController()
@@ -152,7 +147,7 @@ namespace BookSample.Controllers
             [HttpGet, ActionName("Export")]
             public FileResult Export()
             {
-                var fileExport = new ExportEntity<Book>(_bookRepository.GetAll(), _booksdocXls);
+                var fileExport = new ExportEntity<Book>(_bookRepository.GetAll(), HttpContext.Server.MapPath(@"~/App_Data") + _booksdocXls);
                 FileInfo info = new FileInfo(fileExport.SaveToPath());
                 return File(info.OpenRead(), "text/plain", info.Name);
             }

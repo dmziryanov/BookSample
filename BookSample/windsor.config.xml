@@ -2,10 +2,10 @@
 <configuration>
 <components>
 <component id="DBLocalBookRepository"
-             service="Repository.IBookRepository,  BookSample"
-             type="Repository.DBLocalBookRepository,  BookSample"/>
+             service="DAL.Repository.IBookRepository,  DAL"
+             type="DAL.Repository.DBLocalBookRepository,  DAL"/>
 <component id="BookReaderFactory"
-             service="BookSample.Common.IBookReaderFactory,  BookSample"
-             type="BookSample.Common.BookReaderFactory,  BookSample"/>
+             service="DAL.Readers.IBookReaderFactory,  DAL"
+             type="DAL.Readers.BookReaderFactory,  DAL"/>
 </components>
 </configuration>

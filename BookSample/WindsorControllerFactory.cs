@@ -7,7 +7,6 @@ using Castle.Windsor;
 
 namespace Ioc_Windsor
 {
-
     public class WindsorControllerFactory : DefaultControllerFactory
     {
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
@@ -44,10 +43,9 @@ namespace Ioc_Windsor
                 disposable.Dispose();
         }
 
-
-        public void ReleaseController(IController controller)
+        public override void ReleaseController(IController controller)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 
